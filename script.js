@@ -1,6 +1,4 @@
-
 const numbers = {};
-
 let selectedNumbers = [];
 
 function initNumberGrid() {
@@ -65,9 +63,6 @@ function reserveSelectedNumbers() {
         alert(`Os números ${reservedNumbers.join(', ')} já foram reservados`);
         return;
     }
-
-    // Find if the name already has other numbers
-    const existingEntry = Object.entries(numbers).find(([_, details]) => details.name === name);
 
     // Reserve each selected number
     selectedNumbers.forEach(number => {
