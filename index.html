@@ -1,0 +1,48 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="client-area">
+            <h1>Escolha seu Número da Rifa</h1>
+            <div id="number-grid"></div>
+            
+            <div id="selected-numbers-display">
+                Números Selecionados: <span id="selected-numbers-list"></span>
+            </div>
+
+            <div id="reservation-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Reservar Números</h2>
+                    <input type="text" id="name-input" placeholder="Seu Nome">
+                    <button onclick="reserveSelectedNumbers()">Reservar Números</button>
+                </div>
+            </div>
+
+            <button id="reserve-button" onclick="openReservationModal()" style="display:none;">Reservar Números</button>
+            <button onclick="showAdminLogin()">Área Admin</button>
+        </div>
+
+        <div id="admin-area" style="display:none;">
+            <h2>Área Administrativa</h2>
+            <div id="admin-login">
+                <input type="password" id="admin-password" placeholder="Senha">
+                <button onclick="loginAdmin()">Entrar</button>
+            </div>
+            <div id="admin-panel" style="display:none;">
+                <h3>Números Reservados</h3>
+                <button onclick="clearAllNumbers()" class="danger-button">Excluir Toda a Rifa</button>
+                <div id="reserved-numbers-list-by-name"></div>
+                <button onclick="logoutAdmin()">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
