@@ -49,7 +49,7 @@ function openReservationModal() {
     document.getElementById('reservation-modal').style.display = 'block';
 }
 
-function reserveSelectedNumbers() {
+async function reserveSelectedNumbers() {
     const name = document.getElementById('name-input').value.trim();
 
     if (!name) {
@@ -57,31 +57,48 @@ function reserveSelectedNumbers() {
         return;
     }
 
-    // Check if any selected number is already reserved
+    // Verifica se algum número já foi reservado
     const reservedNumbers = selectedNumbers.filter(num => numbers[num]);
     if (reservedNumbers.length > 0) {
         alert(`Os números ${reservedNumbers.join(', ')} já foram reservados`);
         return;
     }
 
-    // Reserve each selected number
-    selectedNumbers.forEach(number => {
-        numbers[number] = { 
-            name, 
-            paid: false 
-        };
-    });
+    try {
+        // Enviar os dados para o servidor
+        const response = await fetch('http://localhost:3000/comprar-rifa', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome: name,
+                numeros: selectedNumbers
+            })
+        });
 
-    // Update localStorage
-    localStorage.setItem('rifaNumbers', JSON.stringify(numbers));
+        const data = await response.json();
 
-    // Update grid and reset selection
-    updateNumberGrid();
-    resetNumberSelection();
+        if (response.ok) {
+            // Marcar os números como reservados localmente
+            selectedNumbers.forEach(number => {
+                numbers[number] = { name, paid: false };
+            });
 
-    // Close modal
-    document.getElementById('reservation-modal').style.display = 'none';
+            // Atualizar o localStorage
+            localStorage.setItem('rifaNumbers', JSON.stringify(numbers));
+
+            // Atualizar a interface
+            updateNumberGrid();
+            resetNumberSelection();
+            document.getElementById('reservation-modal').style.display = 'none';
+        } else {
+            alert(data.error || 'Erro ao reservar números.');
+        }
+    } catch (error) {
+        console.error('Erro ao conectar ao servidor:', error);
+        alert('Erro ao conectar ao servidor.');
+    }
 }
+
 
 function resetNumberSelection() {
     // Remove selected class from all cells
